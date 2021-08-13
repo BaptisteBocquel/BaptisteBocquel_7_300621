@@ -97,7 +97,7 @@
         <div class="div_message-like">
            <p class="comm"><a @click="buttonComments(`${message.id}`)">Commentaires <span :id="`${message.id}+commentLength`"></span></a></p>
           <p class="colorLike"><i class="far fa-heart heart" @click="buttonLike(`${message.id}`) "  :id="`${message.id}`" ></i> {{message.message_likes}}</p>
-          <p> <a  v-if="message.message_title === user_pseudo || admin" ><i class="far fa-trash-alt" @click="deleteMessage(`${message.id}`)"></i></a></p>
+          <p> <a  v-if="message.message_title === user_pseudo || admin == true" ><i class="far fa-trash-alt" @click="deleteMessage(`${message.id}`)"></i></a></p>
         </div>
         <div class="div_message-comments" v-if="commentDisplay == message.id">
           <div :id="`${message.id}+form_comment`" class="div_form_comment" >
