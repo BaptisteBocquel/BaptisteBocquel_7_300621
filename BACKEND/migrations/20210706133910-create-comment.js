@@ -12,15 +12,20 @@ module.exports = {
         type: Sequelize.INTEGER,
         references: {
           model: 'Messages',
-          key:'id'
-        }
+          key:'id',
+          
+        },
+        onDelete: 'CASCADE',
       },
       userId: {
         type: Sequelize.INTEGER,
         references: {
           model: 'Users',
-          key:'id'
-        }
+          key:'id',
+          
+          
+        },
+        onDelete: 'CASCADE',
       },
       comments_content: {
         type: Sequelize.STRING
@@ -31,7 +36,8 @@ module.exports = {
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
+        
       }
     });
   },

@@ -15,8 +15,8 @@ exports.signup = (req,res,next) => {
     }
 
     // verify pseudo length, mail regex, password ...
-    if (user_pseudo.length >= 13 || user_pseudo.length <= 4){
-        return res.status(400).json({ 'error' : 'username must be length 5 - 12 characters' });
+    if (user_pseudo.length >= 13 || user_pseudo.length <= 2){
+        return res.status(400).json({ 'error' : 'username must be length 2 - 12 characters' });
     }
 
     // if email regex return false => error 400
@@ -35,6 +35,7 @@ exports.signup = (req,res,next) => {
     })
     .then(userFound => {
         if(!userFound){
+            
             bcrypt.hash(user_password,5)
             .then(hash => {
                 models.User.create({
@@ -67,7 +68,7 @@ exports.login = (req,res,next) => {
     const { user_mail, user_password} = req.body;
 
     if(user_mail == null && user_password == null){
-        return res.statis(400).json({'error' : 'missing parameters'});
+        return res.status(400).json({'error' : 'missing parameters'});
     }
 
     models.User.findOne({
@@ -83,7 +84,8 @@ exports.login = (req,res,next) => {
                     return res.status(200).json({
                         'userId': userFound.id,
                         'token': auth.generatedTokenForUser(userFound),
-                        'pseudo': userFound.user_pseudo
+                        'pseudo': userFound.user_pseudo,
+                        'admin': userFound.user_admin
                     });
                 }
             })
@@ -104,9 +106,10 @@ exports.getUser = (req,res,next) => {
     }
 
     models.User.findOne({
-        attributes: ['id', 'user_mail', 'user_pseudo', 'user_bio'],
+        attributes: ['id', 'user_mail', 'user_pseudo', 'user_bio', 'user_password'],
         where: {id : userId}
     })
+    
     .then( user => {
         if(user){
             res.status(201).json(user);
@@ -124,38 +127,79 @@ exports.updateUser = (req,res,next) => {
 
     //Params
     let user_bio = req.body.user_bio;
-
-    models.User.findOne({
-        attributes: ['id', 'user_bio'],
-        where: { id: userId }
-    })
-    .then( userFound => {
-        if(userFound){
-            userFound.update({
-                user_bio: (user_bio ? user_bio : userFound.user_bio)
-            })
-            return res.status(201).json(userFound);
-        }else{
-            return res.status(500).json({'error' : 'cannot update user'});
-        }
-    })
-    .catch(() => res.status(404).json({'error' : 'user not found'}));
+    let user_password = req.body.user_password;
+    let user_pseudo = req.body.user_pseudo;
+    
+        
+        models.User.findOne({
+            attributes: ['id', 'user_bio', 'user_password', 'user_pseudo'],
+            where: { id: userId }
+        })
+        .then( userFound => {
+            if(userFound){
+                if(user_password){
+                    bcrypt.hash(user_password,5)
+                    .then(hash => {
+                        userFound.update({
+                            user_bio: (user_bio ? user_bio : userFound.user_bio),
+                            user_password: hash,
+                            user_pseudo:(user_pseudo ? user_pseudo : userFound.user_pseudo)
+                        })
+						return res.status(201).json(userFound);
+                    })
+                    
+                }else{
+                    userFound.update({
+                        user_bio: (user_bio ? user_bio : userFound.user_bio),
+                        user_password: userFound.user_password,
+                        user_pseudo:(user_pseudo ? user_pseudo : userFound.user_pseudo)
+                    })
+                    return res.status(201).json(userFound);
+                }
+            }else{
+                return res.status(500).json({'error' : 'cannot find user'});
+            }
+        }) 
+        .catch(() => res.status(404).json({'error' : 'user not found'}));
 };
 
 exports.deleteUser = (req,res,next) => {
     //getting auth header
     let headerAuth = req.headers['authorization'];
     let userId = auth.getUserId(headerAuth);
-
-    models.User.destroy({
-        where: { id: userId }
+    models.Like.destroy({
+        where: {userId : userId}
     })
-    .then( deletedRecord => {
-        if(deletedRecord === 1){
-            return res.status(200).json({message: 'Deleted successfully'});
+    .then(deletedRecord => {
+        
+        if(deletedRecord >= 0){
+            
+            models.Message.destroy({
+                where: {userId : userId}
+            })
+            .then( deletedRecord => {
+                if(deletedRecord >= 0){
+                    models.User.destroy({
+                        where: { id: userId }
+                    })
+                    .then( deletedRecord => {
+                        if(deletedRecord === 1){
+                            return res.status(200).json({message: 'Deleted successfully'});
+                        }else{
+                            return res.status(408).json({'error' : 'user not found' });
+                        }
+                    })
+                    .catch((e) => res.status(409).json({'error' : 'cannot delete user'}));
+                }else{
+                    return res.status(408).json({'error' : 'message not found'});
+                }
+            })
+            .catch((e) => res.status(409).json({'error' : 'cannot find message'}));
         }else{
-            return res.status(404).json({'error' : 'record not found'});
+            return res.status(408).json({'error' : 'like not found'});
         }
     })
-    .catch(() => res.status(404).json({'error' : 'user not found'}));
+    .catch((e) => res.status(409).json({'error' : 'cannot find like'}));
+    
+    
 };

@@ -88,6 +88,7 @@ export default {
       user_bio:"",
       loginIsDisplay: true,
       signupIsDisplay : false,
+      
     }
     
   },
@@ -104,55 +105,97 @@ export default {
       e.preventDefault();
       
       //create value input login mail
-      
       let user_mail = this.user_mail ;
       
-      
       //create value input login mail
-      
       let user_password = this.user_password;
-      
       
       axios.post('http://localhost:3000/api/auth/login', {
         user_mail: user_mail,
         user_password: user_password
       })
       .then( response => {
-        console.log(response);
         localStorage.setItem("pseudo", response.data.pseudo);
         localStorage.setItem("token", response.data.token);
+        localStorage.setItem("admin", response.data.admin);
         document.location.href="http://localhost:8080/?#/home";
       })
-      .catch(() => {
-        let warning = document.getElementById('warning_login');
-        warning.textContent = "Impossible de se connecter";
+      .catch((e) => {
+        
+        if(e.response.data.error == "User not exist in database"){
+            let warning = document.getElementById('warning_login');
+            warning.textContent = "Merci de saisir un email valide";
+          }
+
+        if(e.response.data.error == "Invalid password"){
+            let warning = document.getElementById('warning_login');
+            warning.textContent = "Mot de passe incorrect";
+        }
+
+        if(e.response.data.error == "unable to verify user"){
+            let warning = document.getElementById('warning_login');
+            warning.textContent = "Impossible de se connecter";
+        }
       });
     },
     submitSignup: function (e){
       e.preventDefault();
       
-      //create value input login mail
-      let user_mail = this.user_mail ;
-      //create value input login mail
-      let user_password = this.user_password;
-      //let user_password_confirm = this.user_password_confirm;
-      let user_pseudo = this.user_pseudo;
-      let user_bio = this.user_bio;
+      var user_mail = this.user_mail ;
+      var user_password = this.user_password;
+      var user_password_confirm = this.user_password_confirm;
+      var user_pseudo = this.user_pseudo;
+      var user_bio = this.user_bio;
+      localStorage.setItem("mail", user_mail);
+      localStorage.setItem("password", user_password);
 
-      axios.post('http://localhost:3000/api/auth/signup', {
-        user_mail: user_mail,
-        user_password: user_password,
-        user_pseudo: user_pseudo, 
-        user_bio: user_bio
-      })
-      .then( response => {
-        console.log(response);
-        this.submitLogin(user_mail, user_password);
-      })
-      .catch(() => {
+      if(user_password != user_password_confirm ){
         let warning = document.getElementById('warning_signup');
-        warning.textContent = "Impossible de s'inscrire";
+        warning.textContent = "Veuillez resaisir votre mot de passe";
+        
+      }else{
+        axios.post('http://localhost:3000/api/auth/signup', {
+          user_mail: user_mail,
+          user_password: user_password,
+          user_pseudo: user_pseudo, 
+          user_bio: user_bio
+        })
+        .then( () => {
+          axios.post('http://localhost:3000/api/auth/login', {
+          user_mail: user_mail,
+          user_password: user_password
+        })
+        .then( response => {
+          localStorage.setItem("pseudo",response.data.pseudo);
+          localStorage.setItem("token", response.data.token);
+          document.location.href="http://localhost:8080/?#/home";
+        })
+        .catch(() => {
+          let warning = document.getElementById('warning_login');
+          warning.textContent = "Impossible de se connecter";
+        });
+      })
+      .catch((e) => {
+          if(e.response.data.error == "invalid email"){
+            let warning = document.getElementById('warning_signup');
+            warning.textContent = "Merci de saisir un email valide";
+          }
+
+          if(e.response.data.error == "invalid password"){
+            let warning = document.getElementById('warning_signup');
+            warning.textContent = "Mot de passe non valide. Il doit contenir au moins 8 caractères, avec une majuscule et un chiffre.";
+          }
+
+          if(e.response.data.error == "username must be length 2 - 12 characters"){
+            let warning = document.getElementById('warning_signup');
+            warning.textContent = "Votre pseudo doit contenir entre 2 et 12 caractères.";
+          }
+        
       });
+        
+      }
+
+      
     },
   },
   components: {
@@ -217,6 +260,35 @@ export default {
   color: #fd2d01;
 }
 
+// TABLETTES DISPLAY
 
+@media screen and (min-width: 600px) and (max-width:1024px) {
+  .login{
+    
+    &-presentation{
+      width:100%;
+    }
+  }
+}
+
+//MOBILE DISPLAY
+@media screen and (min-width: 350px) and (max-width: 599px){
+  .login{
+      
+      &-presentation{
+        width:90%;
+        img{
+          width: 100%;
+          height: 100px;
+          object-fit: cover;
+          object-position: -10px;
+          margin-bottom: 0px;
+        }
+      }
+      &-id{
+        width:90%;
+      }
+    }
+}
 
 </style>

@@ -26,12 +26,14 @@ module.exports = (sequelize, DataTypes) => {
       models.Comment.belongsTo(models.User, {
         foreignKey: 'userId',
         as: 'user',
-      });
+        
+      },);
 
       models.Comment.belongsTo(models.Message, {
         foreignKey: 'messageId',
         as: 'message',
-      });
+        
+      },);
     }
   };
   Comment.init({

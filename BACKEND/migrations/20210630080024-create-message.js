@@ -13,8 +13,10 @@ module.exports = {
         type: Sequelize.INTEGER,
         references: {
           model:'Users',
-          key: 'id'
-        }
+          key: 'id',
+         
+        },
+        onDelete: 'CASCADE',
       },
       message_title: {
         allowNull:false,
@@ -34,14 +36,18 @@ module.exports = {
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
+        
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
-      }
+        type: Sequelize.DATE,
+     
+      },
+      
     });
   },
+  
   down: async (queryInterface, Sequelize) => {
     await queryInterface.dropTable('Messages');
   }

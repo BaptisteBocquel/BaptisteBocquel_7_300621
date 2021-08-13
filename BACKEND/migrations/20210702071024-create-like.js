@@ -13,20 +13,25 @@ module.exports = {
         type: Sequelize.INTEGER,
         references: {
           model:'Messages',
-          key:'id'
-        }
+          key:'id',
+          
+        },
+        onDelete: 'CASCADE',
       },
       userId: {
         allowNull: false,
         type: Sequelize.INTEGER,
         references: {
           model: 'Users',
-          key:'id'
-        }
+          key:'id',
+          
+        },
+        onDelete: 'CASCADE',
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
+       
       },
       updatedAt: {
         allowNull: false,

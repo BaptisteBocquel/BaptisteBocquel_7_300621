@@ -34,3 +34,42 @@ exports.createComment = (req,res,next) => {
     })
     .catch(() => res.status(500).json({'error' : 'unable to verify Message'}));
 };
+
+exports.getComments = (req,res,next) => {
+
+    let messageId = parseInt(req.params.messageId);
+    
+    models.Message.findOne({
+        where : { id: messageId },
+        
+    })
+    .then(messageFound => {
+        
+        if(messageFound){
+            models.Comment.findAll ({
+                where : {messageId:messageId },
+                include : [{
+                    model : models.User,
+                    attributes: ['user_pseudo'],
+                    as : 'user'
+                }]
+                
+            })
+            .then(comments => {
+                if(comments){
+                    res.status(200).json(comments);
+                } else {
+                    res.status(404).json({'error' : 'no comments found'});
+                }
+            })
+            .catch ((error) => { 
+                console.log(error);
+                res.status(500).json({"error" : "invalid fields"});
+            });
+        }else{
+            return res.status(404).json({'error' : 'Comments not found'})
+        }
+
+    })
+    .catch(() => res.status(500).json({'error' : 'unable to verify Message'}));
+};
