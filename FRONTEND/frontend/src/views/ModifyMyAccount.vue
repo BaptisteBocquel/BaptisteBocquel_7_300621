@@ -93,6 +93,20 @@ export default {
 
 <style lang="scss">
     .compte{
+      text-align: center;
+      h1{
+        margin-top: -1px;
+        margin-bottom: 60px;
+        background-color: #fd2d01;
+        color: white; 
+        height:80px;
+        width: 100%;
+        padding-bottom: 20px;
+      }
+      h2{
+        text-align: center;
+        color: #fd2d01;
+      }
         input{
             width: 30%;
             margin: 0 auto;
@@ -110,7 +124,7 @@ export default {
         justify-content: center;
         align-items: center;
             p{
-                padding-top:50px;
+                padding-top:20px;
                 margin-left: 50px;
             }
         }
@@ -130,7 +144,41 @@ export default {
         }
         &-choice{
           flex-direction: column;
+          p{
+            margin-left: 0;
+          }
         }
     }
+}
+
+@media screen and (max-width: 349px){
+  .compte{
+        h1{
+          
+          height: 150px;
+        }
+        input{
+            width: 80%;
+            
+        }
+        &-choice{
+          flex-direction: column;
+          p{
+            margin-left: 0;
+          }
+        }
+    }
+}
+
+ // TABLETTES DISPLAY
+
+@media screen and (min-width: 600px) and (max-width:1024px) {
+  .compte{
+    width: 100%;
+    margin: 0;
+    input{
+      width: 70%;
+    }
+  }
 }
 </style>  

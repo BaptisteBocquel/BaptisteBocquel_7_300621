@@ -415,6 +415,7 @@ export default {
 <style lang="scss">
   .home{
     background-color: rgb(255, 246, 246);
+    padding-bottom: 20px;
   }
 
   .homepage{

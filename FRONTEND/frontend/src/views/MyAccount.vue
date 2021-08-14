@@ -4,7 +4,7 @@
     <div class="compte">
       <h1>Mon compte</h1>
       
-        <div>
+        <div class="displayAccount">
           <h2> PSEUDO : </h2> <br/> <p> {{ account.user_pseudo }}  </p>
           <h2> MAIL : </h2> <br/> <p> {{ account.user_mail }}  </p>
           <h2> PASSWORD : </h2> <p> <br/> {{ account.user_password}}
@@ -111,6 +111,7 @@ export default {
       padding-bottom: 20px;
     }
     h2{
+      text-align: center;
       color: #fd2d01;
     }
     p{
