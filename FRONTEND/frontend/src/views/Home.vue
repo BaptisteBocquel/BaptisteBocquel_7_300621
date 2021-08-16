@@ -97,7 +97,8 @@
         <div class="div_message-like">
            <p class="comm"><a @click="buttonComments(`${message.id}`)">Commentaires <span :id="`${message.id}+commentLength`"></span></a></p>
           <p class="colorLike"><i class="far fa-heart heart" @click="buttonLike(`${message.id}`) "  :id="`${message.id}`" ></i> {{message.message_likes}}</p>
-          <p> <a  v-if="message.message_title === user_pseudo || admin == true" ><i class="far fa-trash-alt" @click="deleteMessage(`${message.id}`)"></i></a></p>
+          <p> <a  v-if="message.message_title === user_pseudo || adminOrNo == true " ><i class="far fa-trash-alt" @click="deleteMessage(`${message.id}`)"></i></a></p>
+          
         </div>
         <div class="div_message-comments" v-if="commentDisplay == message.id">
           <div :id="`${message.id}+form_comment`" class="div_form_comment" >
@@ -139,7 +140,7 @@ export default {
   data () {
     return{
       message_title: localStorage.getItem('pseudo'),
-      admin: localStorage.getItem('admin'),
+      adminOrNo: "",
       message_content: "",
       comment_content: "",
       commentDisplay: "",
@@ -158,18 +159,37 @@ export default {
     axios
       .get('http://localhost:3000/api/messages')
       .then(response => {
-         
+          
           this.messages = response.data;
+          
           
           //get length of comment's message to display before clicking
           for (let i=0; i<response.data.length; i++){
             this.lengthComments(response.data[i].id);
           }
         
-      })
+          })
       .catch((e) => {
         console.log(e);
       }); 
+
+      // get if user id admin or no 
+        let token = localStorage.getItem("token");
+
+        if(!token){
+            localStorage.clear();
+            document.location.href="http://localhost:8080";
+        }
+
+        axios
+          .get('http://localhost:3000/api/auth/me',
+          {
+              headers : {
+                Authorization: `Bearer ${token}`,
+              }
+          })
+          .then(response => (this.adminOrNo = response.data.user_admin))
+
   },
   
   methods : {
@@ -180,6 +200,7 @@ export default {
        var image = document.getElementById('file-input');
        var youtubeLink = this.youtubeLink;
        var message_attachment = "";
+
 
        if(image){
           message_attachment = image.files[0];
@@ -431,7 +452,7 @@ export default {
       box-shadow: grey 2px 2px 10px;
       padding: 20px 20px;
       border-radius: 10px;
-      height: 480px;
+      height: 500px;
       
       textarea {
         resize: none;
@@ -589,6 +610,7 @@ export default {
 
   .div_message{
     margin: 0 auto;
+    max-width: 850px;
     width: 55%;
     box-shadow: grey 2px 2px 10px;
     margin-top : 50px;
@@ -613,6 +635,8 @@ export default {
       margin-bottom: 10px;
       font-size: 22px;
       margin-left: 20px;
+      margin-right: 20px;
+      text-align: justify;
     }
     &-youtube{
       text-align:center;
@@ -649,6 +673,7 @@ export default {
         font-size:19px;
         display: flex;
         align-items: center;
+        
         margin-left: 10px;
       }
       & .comm{
@@ -684,6 +709,7 @@ export default {
       p{
         font-size: 19px;
         margin-left: 15px;
+        
         
       }
       .buttonFormComment{

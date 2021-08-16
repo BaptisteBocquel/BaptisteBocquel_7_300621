@@ -7,7 +7,7 @@
         <div class="displayAccount">
           <h2> PSEUDO : </h2> <br/> <p> {{ account.user_pseudo }}  </p>
           <h2> MAIL : </h2> <br/> <p> {{ account.user_mail }}  </p>
-          <h2> PASSWORD : </h2> <p> <br/> {{ account.user_password}}
+          <h2> PASSWORD : </h2> <p> <br/> {{ account.user_password}}</p>
           <h2> BIO : </h2> <br/> <p> {{ account.user_bio }}  </p>    
         </div>
 

@@ -2,12 +2,6 @@ const models = require('../models');
 const auth = require('../middleware/auth');
 const fs = require('fs');
 
-const TITLE_LIMIT = 2;
-const CONTENT_LIMIT = 4;
-const ITEMS_LIMIT = 50;
-
-
-
 exports.createMessage = (req,res,next) => {
     //getting auth header
     let headerAuth = req.headers['authorization'];
@@ -15,7 +9,6 @@ exports.createMessage = (req,res,next) => {
     let userId = auth.getUserId(headerAuth);
     
     //Params
-    
     let message_title = req.body.message_title;
     let message_content = req.body.message_content;
     if(req.file === undefined){
@@ -34,8 +27,6 @@ exports.createMessage = (req,res,next) => {
         where: { id: userId }
     })
     .then(userFound => {
-        //console.log(message_title);
-        //console.log(message_attachment);
         if(userFound){
             models.Message.create({
                 message_title : message_title,
@@ -58,32 +49,37 @@ exports.createMessage = (req,res,next) => {
 
 
 exports.getMessages = (req,res,next) => {
-
-    models.Message.findAll({
+    /*if(!req.session.user){
+        return res.status(401).send()
+    }else{*/
         
-        order: [
-            ['id', 'DESC'],
-            
-        ],
-        include : [
-            {
-            model : models.User,
-            attributes: ['user_pseudo'],
-            },
-        ]
-    })
-    .then(messages => {
-              
-        if(messages){
-            res.status(200).json(messages);
-        } else {
-            res.status(404).json({'error' : 'no messages found'});
-        }
-    })
-    .catch ((error) => { 
-        console.log(error);
-        res.status(500).json({"error" : "invalid fields"});
-    });
+        models.Message.findAll({
+        
+            order: [
+                ['id', 'DESC'],
+                
+            ],
+            include : [
+                {
+                model : models.User,
+                attributes: ['user_pseudo'],
+                },
+            ]
+        })
+        .then(messages => {
+                  
+            if(messages){
+                res.status(200).json(messages);
+            } else {
+                res.status(404).json({'error' : 'no messages found'});
+            }
+        })
+        .catch ((error) => { 
+            console.log(error);
+            res.status(500).json({"error" : "invalid fields"});
+        });
+    //}
+    
 };
 
 exports.deleteMessage = (req,res,next) => {
@@ -116,7 +112,6 @@ exports.deleteMessage = (req,res,next) => {
                                 where: { id: messageId}
                             })
                             .then(messageFound => {
-                                console.log(messageFound)
                                 const filename = messageFound.message_attachment.split('/images/')[1];
                                 fs.unlink(`images/${filename}`, () => {
                                     models.Message.destroy({

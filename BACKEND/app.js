@@ -10,6 +10,7 @@ const rateLimit = require("express-rate-limit");
 const cookieParser = require('cookie-parser');
 const filter = require('content-filter');
 const helmet = require('helmet');
+const session = require('express-session');
 
 // HEADERS TO AVOID CORS RESTRICTIONS
 
@@ -33,6 +34,19 @@ app.use(limiter);
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cookieParser());
+
+app.use(session({
+  name : process.env.NAME_SESSION,
+  secret: process.env.PASSWORD_SESSION,
+  path    : '/',
+  resave: true,
+  saveUninitialized: true,
+  cookie: { 
+    maxAge : 180 * 60 * 1000,
+  }
+})
+);
+
 
 // SETTINGS CONTENT-FILTER
 

@@ -81,6 +81,7 @@ exports.login = (req,res,next) => {
                 if(!valid){
                     return res.status(401).json({"error" : "Invalid password"});
                 }else{
+                    
                     return res.status(200).json({
                         'userId': userFound.id,
                         'token': auth.generatedTokenForUser(userFound),
@@ -92,6 +93,8 @@ exports.login = (req,res,next) => {
         }else{
             return res.status(404).json({'error': 'User not exist in database'});
         }
+        req.session.user = userFound.user_pseudo;
+        console.log(req.session.user)
     })
     .catch(() => res.status(500).json({ 'error' : 'unable to verify user'}));
 };
@@ -106,7 +109,7 @@ exports.getUser = (req,res,next) => {
     }
 
     models.User.findOne({
-        attributes: ['id', 'user_mail', 'user_pseudo', 'user_bio', 'user_password'],
+        attributes: ['id', 'user_mail', 'user_pseudo', 'user_bio', 'user_password','user_admin'],
         where: {id : userId}
     })
     

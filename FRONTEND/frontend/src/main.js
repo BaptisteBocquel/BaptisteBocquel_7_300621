@@ -5,9 +5,11 @@ import infiniteScroll from 'vue-infinite-scroll'
 import VueObserveVisibility from 'vue-observe-visibility'
 import VueSessionStorage from 'vue-sessionstorage'
 import moment from 'moment-timezone'
+import SimpleVueValidation from 'simple-vue-validator';
+
 Vue.use(VueSessionStorage)
 Vue.use(VueObserveVisibility);
-
+Vue.use(SimpleVueValidation);
 Vue.config.productionTip = false;
 
 Vue.use(infiniteScroll);
