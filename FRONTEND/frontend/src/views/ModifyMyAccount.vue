@@ -97,7 +97,7 @@ export default {
       h1{
         margin-top: -1px;
         margin-bottom: 60px;
-        background-color: #fd2d01;
+        background-color: #b64e39;
         color: white; 
         height:80px;
         width: 100%;
@@ -105,7 +105,7 @@ export default {
       }
       h2{
         text-align: center;
-        color: #fd2d01;
+        color: #b64e39;
       }
         input{
             width: 30%;
@@ -113,11 +113,11 @@ export default {
             margin-bottom: 50px;
         }
         .btn{
-          background-color: #fd2d01 ;
+          background-color: #b64e39 ;
           color: white;
         }
         a{
-          color: #fd2d01;
+          color: #b64e39;
         }
         &-choice{
         display:flex;

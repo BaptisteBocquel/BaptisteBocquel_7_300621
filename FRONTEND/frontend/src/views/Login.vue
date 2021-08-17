@@ -19,7 +19,7 @@
             <label for="exampleInputEmail1">Adresse Mail</label>
             <input v-model="user_mail" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Entrez votre email" required>
             <div class="message">{{ validation.firstError('user_mail') }}</div>
-            <small id="emailHelp" class="form-text text-muted">Nous ne partagerons pas votre mot de passe.</small>
+            <small id="emailHelp" class="form-text text-muted">Nous ne partagerons pas votre adresse mail.</small>
           </div>
           <div class="form-group">
             <label for="exampleInputPassword1">Mot de passe</label>
@@ -77,7 +77,7 @@
 <script>
 import axios from 'axios';
 import SimpleVueValidation from 'simple-vue-validator';
-  const Validator = SimpleVueValidation.Validator;
+const Validator = SimpleVueValidation.Validator;
 
 export default {
   name: 'Login',
@@ -129,27 +129,25 @@ export default {
       
       //create value input login mail
       let user_password = this.user_password;
+      
       this.$validate()
-      .then(function(success){
-        if(success){
+      .then(function(){
           axios.post('http://localhost:3000/api/auth/login', {
-        user_mail: user_mail,
-        user_password: user_password
-      })
-      .then( response => {
-        localStorage.setItem("pseudo", response.data.pseudo);
-        localStorage.setItem("token", response.data.token);
-        
-        document.location.href="http://localhost:8080/?#/home";
-      })
-      .catch(() => {
+            user_mail: user_mail,
+            user_password: user_password
+          })
+          .then( response => {
+          localStorage.setItem("pseudo", response.data.pseudo);
+          localStorage.setItem("token", response.data.token);
+          
+          document.location.href="http://localhost:8080/?#/home";
+          })
+          .catch(() => {
             let warning = document.getElementById('warning_login');
             warning.textContent = "Impossible de se connecter";
-        
-      });
-    }
-        
-    })
+            
+          }); 
+      })
         
     },
     submitSignup: function (e){
@@ -190,7 +188,7 @@ export default {
               });
             })
             .catch((e) => {
-                console.log(e.response)
+
                 if(e.response.data.error === "user already exist"){
                   let warning = document.getElementById('warning_signup');
                   warning.textContent = "Ce mail est déjà utilisé";
@@ -199,11 +197,6 @@ export default {
             });
           }
         });
-        
-        
-      //}
-
-      
     },
   },
   components: {
@@ -220,7 +213,7 @@ export default {
   &-form{
     margin-top: 50px;
     .message{
-      color: #fd2d01;
+      color: #b64e39;
     }
   }
   &-presentation{
@@ -243,15 +236,15 @@ export default {
     button{
         color: white;
         width: 150px;
-        border: 1px solid #fd2d01;
+        border: 1px solid #b64e39;
         border-radius: 5px;
-        background-color: #fd2d01;
+        background-color: #b64e39;
         padding: 5px;
         margin-top:25px;
         &:hover{
           background-color: #fbc0c0;
-          border: 1px solid #fd2d01;
-          color : #fd2d01;
+          border: 1px solid #b64e39;
+          color : #b64e39;
         }
       }
     &__buttons{
@@ -268,7 +261,7 @@ export default {
 .warning{
   text-align: center;
   margin-top: 30px;
-  color: #fd2d01;
+  color: #b64e39;
 }
 
 // TABLETTES DISPLAY

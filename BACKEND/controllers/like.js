@@ -11,7 +11,7 @@ exports.like = (req,res,next) => {
     let messageId = parseInt(req.params.messageId);
 
     if (messageId <= 0){
-        return res.status(400).json({ 'error': 'invalid parameters'}); //if idMessage valid or not
+        return res.status(401).json({ 'error': 'invalid parameters'}); //if idMessage valid or not
     }
 
     models.Message.findOne({
@@ -50,7 +50,7 @@ exports.like = (req,res,next) => {
                            })
                            .catch(() => res.status(500).json({'error': 'cannot update message like counter'}));
                        }else{
-                           return res.status(409).json({'error':'message already liked'});
+                           return res.status(400).json({'error':'message already liked'});
                        }
                     }) 
                     .catch(() => res.status(500).json({'error': 'unable to set user reaction'}));              
@@ -60,7 +60,7 @@ exports.like = (req,res,next) => {
             })
             .catch(() => res.status(500).json({'error': 'unable to verify user'}));
         } else{
-            return res.status(404).json({'error' : 'post already like'});
+            return res.status(400).json({'error' : 'post already like'});
         }  
     })
     .catch(() => res.status(500).json({'error' : 'unable to verify Message'}));
@@ -75,7 +75,7 @@ exports.dislike = (req,res,next) => {
         let messageId = parseInt(req.params.messageId);
     
         if (messageId <= 0){
-            return res.status(400).json({ 'error': 'invalid parameters'}); //if idMessage valid or not
+            return res.status(401).json({ 'error': 'invalid parameters'}); //if idMessage valid or not
         }
     
         models.Message.findOne({
@@ -114,7 +114,7 @@ exports.dislike = (req,res,next) => {
                                })
                                .catch(() => res.status(500).json({'error': 'cannot update message like counter'}));
                            }else{
-                               return res.status(409).json({'error':'message already disliked'});
+                               return res.status(400).json({'error':'message already disliked'});
                            }
                         }) 
                         .catch(() => res.status(500).json({'error': 'unable to set user reaction'}));              
@@ -124,7 +124,7 @@ exports.dislike = (req,res,next) => {
                 })
                 .catch(() => res.status(500).json({'error': 'unable to verify user'}));
             } else{
-                return res.status(404).json({'error' : 'post already like'});
+                return res.status(400).json({'error' : 'post already like'});
             }  
         })
         .catch(() => res.status(500).json({'error' : 'unable to verify Message'}));

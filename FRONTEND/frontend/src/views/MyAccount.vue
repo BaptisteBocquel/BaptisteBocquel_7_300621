@@ -104,7 +104,7 @@ export default {
     h1{
       margin-top: -1px;
       margin-bottom: 60px;
-      background-color: #fd2d01;
+      background-color: #b64e39;
       color: white; 
       height:80px;
       width: 100%;
@@ -112,7 +112,7 @@ export default {
     }
     h2{
       text-align: center;
-      color: #fd2d01;
+      color: #b64e39;
     }
     p{
       font-size: 21px;
@@ -132,7 +132,7 @@ export default {
       color: black;
       }
       #toDelete{
-        color: #fd2d01;
+        color: #b64e39;
         &:hover{
           text-decoration: underline;
         }

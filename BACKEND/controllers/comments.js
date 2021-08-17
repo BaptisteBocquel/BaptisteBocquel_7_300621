@@ -11,7 +11,7 @@ exports.createComment = (req,res,next) => {
     let comments_content = req.body.comments_content;
 
     if (messageId <= 0){
-        return res.status(400).json({ 'error': 'invalid parameters'}); //if idMessage valid or not
+        return res.status(401).json({ 'error': 'invalid parameters'}); //if idMessage valid or not
     }
 
     models.Message.findOne({
@@ -63,7 +63,6 @@ exports.getComments = (req,res,next) => {
                 }
             })
             .catch ((error) => { 
-                console.log(error);
                 res.status(500).json({"error" : "invalid fields"});
             });
         }else{

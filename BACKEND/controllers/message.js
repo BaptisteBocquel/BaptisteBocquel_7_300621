@@ -89,7 +89,7 @@ exports.deleteMessage = (req,res,next) => {
     let messageId = parseInt(req.params.messageId);
 
     if (messageId <= 0){
-        return res.status(400).json({ 'error': 'invalid parameters'}); //if idMessage valid or not
+        return res.status(401).json({ 'error': 'invalid parameters'}); //if idMessage valid or not
     }
 
     models.Like.destroy({

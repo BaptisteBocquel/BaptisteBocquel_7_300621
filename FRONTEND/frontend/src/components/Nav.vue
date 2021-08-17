@@ -37,7 +37,7 @@
 <style lang="scss">
     #nav{
         .navbar{
-            background-color: #fd2d01;
+            background-color: #b64e39;
             margin: 0;
             .nav-item-little{
                 display:none;

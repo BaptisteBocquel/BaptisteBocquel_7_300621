@@ -21,12 +21,12 @@ exports.signup = (req,res,next) => {
 
     // if email regex return false => error 400
     if(!email_regex.test(user_mail)){
-        return res.status(420).json({'error' : 'invalid email'});
+        return res.status(400).json({'error' : 'invalid email'});
     }
 
     // if password regex return false => error 400 (password with at least: one digit, one lower case, one upper case, at least 8 characters)
     if(!password_regex.test(user_password)){
-        return res.status(422).json({'error' : 'invalid password'});
+        return res.status(400).json({'error' : 'invalid password'});
     }
 
     models.User.findOne({
@@ -55,7 +55,7 @@ exports.signup = (req,res,next) => {
             })
         })
         }else{
-            return res.status(409).json({ 'error' : 'user already exist'});
+            return res.status(400).json({ 'error' : 'user already exist'});
         }
     })
     .catch(() => res.status(500).json({ 'error' : 'unable to verify user' }));
@@ -79,7 +79,7 @@ exports.login = (req,res,next) => {
             bcrypt.compare(user_password,userFound.user_password)
             .then(valid => {
                 if(!valid){
-                    return res.status(401).json({"error" : "Invalid password"});
+                    return res.status(400).json({"error" : "Invalid password"});
                 }else{
                     
                     return res.status(200).json({
@@ -105,7 +105,7 @@ exports.getUser = (req,res,next) => {
     let userId = auth.getUserId(headerAuth);
 
     if (userId < 0){
-        return res.status(400).json({'error' : 'wrong token'});
+        return res.status(401).json({'error' : 'wrong token'});
     }
 
     models.User.findOne({
@@ -189,20 +189,20 @@ exports.deleteUser = (req,res,next) => {
                         if(deletedRecord === 1){
                             return res.status(200).json({message: 'Deleted successfully'});
                         }else{
-                            return res.status(408).json({'error' : 'user not found' });
+                            return res.status(404).json({'error' : 'user not found' });
                         }
                     })
-                    .catch((e) => res.status(409).json({'error' : 'cannot delete user'}));
+                    .catch((e) => res.status(500).json({'error' : 'cannot delete user'}));
                 }else{
-                    return res.status(408).json({'error' : 'message not found'});
+                    return res.status(404).json({'error' : 'message not found'});
                 }
             })
-            .catch((e) => res.status(409).json({'error' : 'cannot find message'}));
+            .catch((e) => res.status(500).json({'error' : 'cannot find message'}));
         }else{
-            return res.status(408).json({'error' : 'like not found'});
+            return res.status(404).json({'error' : 'like not found'});
         }
     })
-    .catch((e) => res.status(409).json({'error' : 'cannot find like'}));
+    .catch((e) => res.status(500).json({'error' : 'cannot find like'}));
     
     
 };

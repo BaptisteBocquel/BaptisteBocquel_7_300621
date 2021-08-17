@@ -486,11 +486,11 @@ export default {
         .input-file-label {
           font-size: 1.25em;
           font-weight: 700;
-          color: red;
+          color: #b64e39;
           background-color: white;
           display: inline-block;
           padding: 10px;
-          border: 1px solid red;
+          border: 1px solid #b64e39;
           border-radius: 5px;
         }
 
@@ -503,13 +503,13 @@ export default {
         height: 40px; 
       }
       h2{
-        color: #fd2d01;
+        color: #b64e39;
         text-align: center;
         margin-bottom: 30px;
       }
       #errorMessage{
         text-align: center;
-        color: #fd2d01;
+        color: #b64e39;
         margin-top: 10px;
         margin-bottom: 5px;
       }
@@ -519,15 +519,15 @@ export default {
       button{
           color: white;
           width: 150px;
-          border: 1px solid #fd2d01;
+          border: 1px solid #b64e39;
           border-radius: 10px;
-          background-color: #fd2d01;
+          background-color: #b64e39;
           padding: 5px;
           
           &:hover{
             background-color: #fbc0c0;
             border: 1px solid C;
-            color : #fd2d01;
+            color : #b64e39;
           }
       }
       #buttonDisplayImg{
@@ -583,7 +583,7 @@ export default {
         &-users{
           width:95%;
           height:50px;
-          border: 1px solid #fd2d01;
+          border: 1px solid #b64e39;
           border-radius: 10px;
           margin-top:10px;
           display: flex;
@@ -597,7 +597,7 @@ export default {
 
           & .red{
             font-size: 12px;
-            color: red;
+            color: #b64e39;
           }
           & p{
             margin-left: 25px;
@@ -645,7 +645,7 @@ export default {
       text-align: center;
       display:flex;
       justify-content: center;      align-items: center;
-      background-color: #fd2d01;
+      background-color: #b64e39;
       padding: 15px;
       margin-bottom: 10px;
       border-top-right-radius: 10px ;
@@ -704,7 +704,7 @@ export default {
       }
       h4{
         margin-left: 10px;
-        color: #fd2d01;
+        color: #b64e39;
       }
       p{
         font-size: 19px;
@@ -713,7 +713,7 @@ export default {
         
       }
       .buttonFormComment{
-        background-color: #fd2d01;
+        background-color: #b64e39;
         margin-right:40px;
       }  
       .div_form_comment{
